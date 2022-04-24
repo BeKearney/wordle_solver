@@ -1,5 +1,11 @@
 from nltk.corpus import words
 
+import tkinter
+'''
+app = tkinter.Tk()
+
+app.mainloop()
+'''
 word_list = words.words()
 
 word_length = int(input("How long is the word?: "))
@@ -14,7 +20,7 @@ possible_words = [word for word in possible_words if 1 not in [c in word for c i
 for i in range(word_length):
     if input(f'letter #{i+1} green? (y/n): ').lower() == 'y':
         green = input(f'Enter {i+1}st letter: ')
-        possible_words = [str(word) for word in possible_words if word.find(green) == i]
+        possible_words = [str(word) for word in possible_words if word[i] == green]
 
 
 print(possible_words)
