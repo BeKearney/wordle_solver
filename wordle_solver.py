@@ -1,11 +1,11 @@
 import nltk
 import tkinter
 
-from nltk.corpus import words
+from nltk.corpus import wordnet
 
-nltk.download('words')
+nltk.download('wordnet')
 
-word_list = words.words()
+word_list = wordnet.words()
 
 word_length = int(input("How long is the word?: "))
 wordle_list = [word for word in word_list if len(word) == word_length]
