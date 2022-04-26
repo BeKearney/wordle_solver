@@ -25,8 +25,6 @@ for i in range(word_length):
             possible_words = [str(word) for word in possible_words if word[i] == green]
 
 
-print(possible_words)
-
 app = tkinter.Tk()
 app.title("Wordle Solver")
 scroll = tkinter.Scrollbar(app)
