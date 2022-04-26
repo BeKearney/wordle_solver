@@ -1,6 +1,8 @@
 from nltk.corpus import words
 
-import tkinter
+import nltk
+
+nltk.download('words')
 '''
 app = tkinter.Tk()
 
