@@ -4,6 +4,7 @@ import tkinter
 from nltk.corpus import wordnet
 
 nltk.download('wordnet')
+nltk.download('omw-1.4')
 
 word_list = wordnet.words()
 
