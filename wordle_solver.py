@@ -1,18 +1,16 @@
-import nltk
 import tkinter
 
-from nltk.corpus import wordnet
+from english_words import english_words_set
 
-nltk.download('wordnet')
-nltk.download('omw-1.4')
 
-word_list = wordnet.words()
+word_list = english_words_set
 
 word_length = int(input("How long is the word?: "))
-wordle_list = [word for word in word_list if len(word) == word_length]
+possible_words = [word for word in word_list if len(word) == word_length]
 
-yellow_letters = set([char for char in input("yellow letters: ")])
-possible_words = [word for word in wordle_list if yellow_letters.issubset(word)]
+yellow_letters = [char for char in input("yellow letters: ")]
+if yellow_letters:
+    possible_words = [word for word in possible_words if 1 in [c in word for c in yellow_letters]]
 
 grey_letters = [char for char in input("grey letters: ")]
 possible_words = [word for word in possible_words if 1 not in [c in word for c in grey_letters]]
@@ -24,7 +22,6 @@ for i in range(word_length):
             possible_words = [str(word) for word in possible_words if word[i] != green[1]]
         else:
             possible_words = [str(word) for word in possible_words if word[i] == green]
-
 
 app = tkinter.Tk()
 app.title("Wordle Solver")
