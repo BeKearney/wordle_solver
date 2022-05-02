@@ -10,7 +10,7 @@ possible_words = [word for word in word_list if len(word) == word_length]
 
 yellow_letters = [char for char in input("yellow letters: ")]
 if yellow_letters:
-    possible_words = [word for word in possible_words if 1 in [c in word for c in yellow_letters]]
+    possible_words = [word for word in possible_words if 0 not in [c in word for c in yellow_letters]]
 
 grey_letters = [char for char in input("grey letters: ")]
 possible_words = [word for word in possible_words if 1 not in [c in word for c in grey_letters]]
