@@ -4,37 +4,56 @@
 
     <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
     <script defer src="https://pyscript.net/alpha/pyscript.js"></script> 
+    <style>
+        input{
+            border: solid black 1px;
+        }
+    </style>
   </head>
   <py-env>
       - paths:
         - ./wordle.py
   </py-env>
   <body>
+    <label for="length">Word Length:</label>
+    <input type="text" id="length" name="length"><br><br>
+    <label for="yletters">Yellow Letters:</label>
+    <input type="text" id="yletters" name="yletters"><br><br>
+    <label for="gletters">Grey Letters:</label>
+    <input type="text" id="gletters" name="gletters"><br><br>
+    <py-button id="main" label="Find">
+        def on_click(evt):
+          wordle()
+    </py-button>
     <py-script>
 from wordle import english_words_set
+def wordle():
+    word_list = english_words_set
 
+    word_length = int(Element('length').element.value)
+    possible_words = [word for word in word_list if len(word) == word_length]
 
-word_list = english_words_set
+    yellow_letters = [char.lower() for char in Element('yletters').element.value]
+    if yellow_letters:
+        possible_words = [word for word in possible_words if 0 not in [c in word for c in yellow_letters]]
 
-word_length = int(input("How long is the word?: "))
-possible_words = [word for word in word_list if len(word) == word_length]
+    grey_letters = [char.lower() for char in Element('gletters').element.value]
+    possible_words = [word for word in possible_words if 1 not in [c in word for c in grey_letters]]
 
-yellow_letters = [char for char in input("yellow letters: ")]
-if yellow_letters:
-    possible_words = [word for word in possible_words if 0 not in [c in word for c in yellow_letters]]
-
-grey_letters = [char for char in input("grey letters: ")]
-possible_words = [word for word in possible_words if 1 not in [c in word for c in grey_letters]]
-
-for i in range(word_length):
-    green = input(f'Enter letter #{i+1} (if unknown, hit Enter): ')
-    if green != '':
-        if green[0] == '!':
-            possible_words = [str(word) for word in possible_words if word[i] != green[1]]
-        else:
-            possible_words = [str(word) for word in possible_words if word[i] == green]
-            
-print(possible_words)
+    #for i in range(word_length):
+    #    green = input(f'Enter letter #{i+1} (if unknown, hit Enter): ')
+    #    if green != '':
+    #        if green[0] == '!':
+    #            possible_words = [str(word) for word in possible_words if word[i] != green[1]]
+    #        else:
+    #            possible_words = [str(word) for word in possible_words if word[i] == green]
+    #        
+    #print(possible_words)
+    Element('display').clear()
+    for word in possible_words:
+        pyscript.write('display', f'<li>{word}</li>', True)
     </py-script>
+    <ul id="display"></ul>
+    <py-repl id="my-repl"  auto-generate="true"> </py-repl>
   </body>
 </html>
