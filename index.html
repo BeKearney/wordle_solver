@@ -43,6 +43,8 @@ def wordle():
     possible_words = [word for word in possible_words if 1 not in [c in word for c in grey_letters]]
 
     green_letters = Element('green').element.value.split(',')
+    if len(green_letters) != word_length:
+        green_letters = ['' for n in range(word_length)]
     for i in range(word_length):
         green = green_letters[i].lower()
         if green != '':

@@ -11184,6 +11184,7 @@ english_words_set = {
     'homeopath',
     'homeopathic',
     'homeowner',
+    'homer',
     'Homeric',
     'homesick',
     'homespun',
