@@ -8,7 +8,24 @@
         input{
             border: solid black 1px;
         }
+        #length{
+            width: 7%;
+        }
+        .gl{
+            width: 20px;
+            margin-right: 10px;
+        }
     </style>
+    <script>
+        function letter_spaces(){
+            length = document.getElementById("length").value;
+            document.getElementById("green_spaces").innerHTML = '<label>Green Letters: </label';
+            for (let i = 0; i < length; i++){
+                document.getElementById("green_spaces").innerHTML += '<input type="text" class=gl id="g'+i+'">';
+            }
+            document.getElementById("green_spaces");
+        }
+    </script>
   </head>
   <py-env>
       - paths:
@@ -16,13 +33,14 @@
   </py-env>
   <body>
     <label for="length">Word Length:</label>
-    <input type="text" id="length" name="length"><br><br>
+    <input type="number" id="length" name="length" value="5" oninput="letter_spaces()"><br><br>
     <label for="yletters">Yellow Letters:</label>
     <input type="text" id="yletters" name="yletters"><br><br>
     <label for="gletters">Grey Letters:</label>
     <input type="text" id="gletters" name="gletters"><br><br>
-    <label for="green">Green Letters, seperated by comma (ex: |&#9647;RA&#9647;E| --> ,r,a,,e):</label>
-    <input type="text" id="green" name="green"><br><br>
+    <div id="green_spaces">
+    </div>
+    <script>letter_spaces()</script>
     <py-button id="main" label="Find">
         def on_click(evt):
           wordle()
@@ -42,18 +60,15 @@ def wordle():
     grey_letters = [char.lower() for char in Element('gletters').element.value]
     possible_words = [word for word in possible_words if 1 not in [c in word for c in grey_letters]]
 
-    green_letters = Element('green').element.value.split(',')
-    if len(green_letters) != word_length:
-        green_letters = ['' for n in range(word_length)]
     for i in range(word_length):
-        green = green_letters[i].lower()
+        index = f'g{i}'
+        green = Element(index).value.lower()
         if green != '':
             if green[0] == '!':
                 possible_words = [str(word) for word in possible_words if word[i] != green[1]]
             else:
                 possible_words = [str(word) for word in possible_words if word[i] == green]
             
-    #print(possible_words)
     Element('display').clear()
     for word in possible_words:
         pyscript.write('display', f'<li>{word}</li>', True)
