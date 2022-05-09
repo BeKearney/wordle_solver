@@ -2,24 +2,89 @@
   <head>
     <title>Wordle Solver</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script defer src="https://pyscript.net/alpha/pyscript.js"></script> 
     <style>
+        body{
+            font-family: 'Fjalla One';
+            font-size: 2vw;
+            text-align: center;
+            background-color: hsl(230, 30%, 50%);
+            color: hsl(33, 100%, 65%);
+        }
+        h1{
+            font-size: 5vw;
+            border-radius: 15px;
+            border: solid hsl(33, 100%, 65%) 1px;
+            width: 80%;
+            margin-left: 10%;
+            margin-top: 5%;
+            background-color: rgba(0,0,0,0.3);
+        }
         input{
             border: solid black 1px;
+            background-color: rgba(0,0,0,0);
+            padding-left: 4px;
+            border-radius: 9px;
+        }
+        #inputs{
+            margin-top: 3%;
+            border-radius: 15px;
+            border: solid hsl(33, 100%, 65%) 1px;
+            background-color: rgba(0,0,0,0.3);
+            width: 80%;
+            margin-left: 10%;
+        }
+        #main{
+            background-color: hsl(33, 100%, 65%);
+            margin-top: 2%;
         }
         #length{
-            width: 7%;
+            width: 10%;
+            margin-top: 2%;
+        }
+        #green_spaces{
+            margin-bottom: 2%;
+            color: hsl(95, 100%, 65%);
+        }
+        .yellow{
+            color: hsl(55,100%,65%);
+            border-color: hsl(55,100%,65%);
+        }
+        .grey{
+            color: hsl(0,0%,60%);
+            border-color: hsl(0,0%,60%);
         }
         .gl{
-            width: 20px;
+            width: 3%;
             margin-right: 10px;
+            border-color: hsl(95, 100%, 65%);
+        }
+
+        @media (max-width: 800px){
+            h1{
+                font-size: 50px;
+            }
+            body{
+                font-size: 22px;
+            }
+            .gl{
+                width: 7%;
+            }
         }
     </style>
     <script>
         function letter_spaces(){
             length = document.getElementById("length").value;
-            document.getElementById("green_spaces").innerHTML = '<label>Green Letters: </label';
+            if(length < 6){
+                document.getElementById("green_spaces").innerHTML = '<label>Green Letters: </label>';
+            } else {
+                document.getElementById("green_spaces").innerHTML = '<label>Green Letters: </label><br>';
+            }
             for (let i = 0; i < length; i++){
                 document.getElementById("green_spaces").innerHTML += '<input type="text" class=gl id="g'+i+'">';
             }
@@ -32,13 +97,16 @@
         - ./wordle.py
   </py-env>
   <body>
-    <label for="length">Word Length:</label>
-    <input type="number" id="length" name="length" value="5" oninput="letter_spaces()"><br><br>
-    <label for="yletters">Yellow Letters:</label>
-    <input type="text" id="yletters" name="yletters"><br><br>
-    <label for="gletters">Grey Letters:</label>
-    <input type="text" id="gletters" name="gletters"><br><br>
-    <div id="green_spaces">
+      <h1>Wordle Solver</h1>
+      <div id="inputs">
+        <label for="length">Word Length:</label>
+        <input type="number" id="length" name="length" value="5" oninput="letter_spaces()"><br><br>
+        <label class="yellow" for="yletters">Yellow Letters:</label>
+        <input class="yellow" type="text" id="yletters" name="yletters"><br><br>
+        <label class="grey" for="gletters">Grey Letters:</label>
+        <input class="grey" type="text" id="gletters" name="gletters"><br><br>
+        <div id="green_spaces">
+        </div>
     </div>
     <script>letter_spaces()</script>
     <py-button id="main" label="Find">
@@ -51,7 +119,7 @@ def wordle():
     word_list = english_words_set
 
     word_length = int(Element('length').element.value)
-    possible_words = [word for word in word_list if len(word) == word_length]
+    possible_words = [word.lower() for word in word_list if len(word) == word_length]
 
     yellow_letters = [char.lower() for char in Element('yletters').element.value]
     if yellow_letters:
@@ -74,6 +142,6 @@ def wordle():
         pyscript.write('display', f'<li>{word}</li>', True)
     </py-script>
     <ul id="display"></ul>
-    <py-repl id="my-repl"  auto-generate="true"> </py-repl>
+    <!--<py-repl id="my-repl"  auto-generate="true"> </py-repl>-->
   </body>
 </html>
