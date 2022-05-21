@@ -26,7 +26,7 @@
             background-color: rgba(0,0,0,0.3);
         }
         input{
-            border: solid black 1px;
+            border: solid hsl(33, 100%, 65%) 1px;
             background-color: rgba(0,0,0,0);
             padding-left: 4px;
             border-radius: 9px;
@@ -42,6 +42,9 @@
         #main{
             background-color: hsl(33, 100%, 65%);
             margin-top: 2%;
+            color: white;
+            padding: 9px;
+            border-radius: 9px
         }
         #length{
             width: 10%;
@@ -49,6 +52,7 @@
         }
         #green_spaces{
             margin-bottom: 2%;
+            margin-top: 2%;
             color: hsl(95, 100%, 65%);
         }
         .yellow{
@@ -74,6 +78,9 @@
             }
             .gl{
                 width: 7%;
+            }
+            #green_spaces{
+                margin-top: 4%;
             }
         }
     </style>
@@ -104,18 +111,15 @@
         <label class="yellow" for="yletters">Yellow Letters:</label>
         <input class="yellow" type="text" id="yletters" name="yletters"><br><br>
         <label class="grey" for="gletters">Grey Letters:</label>
-        <input class="grey" type="text" id="gletters" name="gletters"><br><br>
+        <input class="grey" type="text" id="gletters" name="gletters"><br>
         <div id="green_spaces">
         </div>
     </div>
     <script>letter_spaces()</script>
-    <py-button id="main" label="Find">
-        def on_click(evt):
-          wordle()
-    </py-button>
+    <button id="main" pys-onClick="wordle">Find</button>
     <py-script>
 from wordle import english_words_set
-def wordle():
+def wordle(*ags, **kws):
     word_list = english_words_set
 
     word_length = int(Element('length').element.value)
@@ -140,6 +144,7 @@ def wordle():
     Element('display').clear()
     for word in possible_words:
         pyscript.write('display', f'<li>{word}</li>', True)
+
     </py-script>
     <ul id="display"></ul>
     <!--<py-repl id="my-repl"  auto-generate="true"> </py-repl>-->
