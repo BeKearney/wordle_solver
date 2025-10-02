@@ -4,10 +4,8 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap" rel="stylesheet"> 
-    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script defer src="https://pyscript.net/alpha/pyscript.js"></script> 
     <style>
         body{
             font-family: 'Fjalla One';
@@ -25,11 +23,24 @@
             margin-top: 5%;
             background-color: rgba(0,0,0,0.3);
         }
+        hr{
+            height: 1px;
+            color: hsl(33, 100%, 65%);
+            margin-left: -40px;
+        }
+        button{
+            font-family: 'Fjalla One';
+            color: white;
+            font-size: 2vw;
+        }
         input{
+            font-family: 'Fjalla One';
             border: solid hsl(33, 100%, 65%) 1px;
             background-color: rgba(0,0,0,0);
             padding-left: 4px;
             border-radius: 9px;
+            color: white;
+            font-size: 2vw;
         }
         #inputs{
             margin-top: 3%;
@@ -84,9 +95,47 @@
             }
         }
     </style>
+    <script src="words.js"></script>
     <script>
+        function wordle_solve(){
+            let length = document.getElementById("length").value;
+            let yellow_letters = document.getElementById("yletters").value.toLowerCase().split("");
+            let grey_letters = document.getElementById("gletters").value.toLowerCase().split("");
+            let display = document.getElementById("display");
+            display.innerHTML = "";
+
+            let possible_words = words_list.filter(word => word.length == length).map(word => word.toLowerCase());
+
+            if(yellow_letters.length > 0){
+                possible_words = possible_words.filter(word => yellow_letters.every(c => word.includes(c)));
+            }
+
+            if(grey_letters.length > 0){
+                possible_words = possible_words.filter(word => grey_letters.every(c => !word.includes(c)));
+            }
+
+            for(let i=0; i < length; i++){
+                let index = "g"+i;
+                let green = document.getElementById(index).value.toLowerCase();
+
+                if(green.length > 0){
+                    if(green[0] == '!'){
+                        possible_words = possible_words.filter(word => word[i] != green[1]);
+                    }
+                    else{
+                        possible_words = possible_words.filter(word => word[i] == green[0]);
+                    }
+                }
+            }
+            console.log(possible_words);
+
+            for(let index in possible_words){
+                display.innerHTML += possible_words[index]+"<hr>";
+            }
+        }
+
         function letter_spaces(){
-            length = document.getElementById("length").value;
+            let length = document.getElementById("length").value;
             if(length < 6){
                 document.getElementById("green_spaces").innerHTML = '<label>Green Letters: </label>';
             } else {
@@ -99,10 +148,6 @@
         }
     </script>
   </head>
-  <py-env>
-      - paths:
-        - ./wordle.py
-  </py-env>
   <body>
       <h1>Wordle Solver</h1>
       <div id="inputs">
@@ -116,37 +161,7 @@
         </div>
     </div>
     <script>letter_spaces()</script>
-    <button id="main" pys-onClick="wordle">Find</button>
-    <py-script>
-from wordle import english_words_set
-def wordle(*ags, **kws):
-    word_list = english_words_set
-
-    word_length = int(Element('length').element.value)
-    possible_words = [word.lower() for word in word_list if len(word) == word_length]
-
-    yellow_letters = [char.lower() for char in Element('yletters').element.value]
-    if yellow_letters:
-        possible_words = [word for word in possible_words if 0 not in [c in word for c in yellow_letters]]
-
-    grey_letters = [char.lower() for char in Element('gletters').element.value]
-    possible_words = [word for word in possible_words if 1 not in [c in word for c in grey_letters]]
-
-    for i in range(word_length):
-        index = f'g{i}'
-        green = Element(index).value.lower()
-        if green != '':
-            if green[0] == '!':
-                possible_words = [str(word) for word in possible_words if word[i] != green[1]]
-            else:
-                possible_words = [str(word) for word in possible_words if word[i] == green]
-            
-    Element('display').clear()
-    for word in possible_words:
-        pyscript.write('display', f'<li>{word}</li>', True)
-
-    </py-script>
+    <button id="main" onclick="wordle_solve()">Find</button>
     <ul id="display"></ul>
-    <!--<py-repl id="my-repl"  auto-generate="true"> </py-repl>-->
   </body>
 </html>
